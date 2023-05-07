@@ -30,8 +30,10 @@ Producto cargarProducto(int itera);
 Producto *cargarProductos(int n);
 Cliente cargarCliente(int itera);
 Cliente *cargarClientes(int n);
+float costoTotalProducto(Producto p);
 void mostrarProducto(Producto p);
 void mostrarProductos(Producto *productos, int n);
+void mostrarTotalApagar(Producto *p, int n);
 void mostrarCliente(Cliente c);
 void mostrarClientes(Cliente *c);
 void liberarMemoria(Cliente *c);
@@ -150,12 +152,17 @@ Cliente *cargarClientes(int n) {
     return c;
 }
 
+float costoTotalProducto(Producto p) {
+    return p.Cantidad*p.PrecioUnitario;
+}
+
 void mostrarProducto(Producto p) {
 
     printf("ProductoID: %d\n", p.ProductoID);
     printf("Cantidad: %d\n", p.Cantidad);
     printf("TipoProducto: %s\n", p.TipoProducto);
     printf("PrecioUnitario: %.2f\n", p.PrecioUnitario);
+    printf("Total: %.2f\n", costoTotalProducto(p));
 }
 
 void mostrarProductos(Producto *productos, int n) {
@@ -165,6 +172,17 @@ void mostrarProductos(Producto *productos, int n) {
         printf("\n");
     }
 }   
+
+void mostrarTotalApagar(Producto *p, int n) {
+
+    float total = 0;
+
+    for(int i = 0; i<n; i++) {
+        total+=costoTotalProducto(p[i]);
+    }
+
+    printf("$%.2f", total);
+}
 
 void mostrarCliente(Cliente c) {
 
@@ -185,8 +203,10 @@ void mostrarClientes(Cliente *c) {
     for(int i = 0; i<maxClientes; i++) {
         printf("--------- Cliente %d: ---------\n", i+1);
         mostrarCliente(c[i]);
-        printf("--------- Productos ---------\n");
+        printf("--------- Productos: ---------\n");
         mostrarProductos(c[i].Productos, c[i].CantidadProductosAPedir);
+        printf("--------- Total a Pagar: ---------\n");
+        mostrarTotalApagar(c[i].Productos, c[i].CantidadProductosAPedir);
         printf("\n\n");
     }
 }
